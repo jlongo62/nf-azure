@@ -21,3 +21,4 @@ override.tf.json
 .vscode/
 .idea/
 .DS_Store
+.nextflow.log
