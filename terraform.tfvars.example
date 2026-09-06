@@ -1,0 +1,8 @@
+project_name = "nf-azure"
+environment  = "dev"
+location     = "eastus"
+storage_container_name = "work"
+tags = {
+  owner       = "platform-team"
+  cost_center = "replace-me"
+}

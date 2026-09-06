@@ -1,0 +1,31 @@
+plugins {
+    id 'nf-azure'
+}
+
+process {
+    executor = 'azurebatch'
+    container = 'ubuntu:24.04'
+}
+
+workDir = 'az://work/nextflow'
+
+azure {
+    activeDirectory {
+        tenantId = '<terraform output -raw entra_tenant_id>'
+        servicePrincipalId = '<terraform output -raw entra_client_id>'
+        servicePrincipalSecret = System.getenv('AZURE_CLIENT_SECRET')
+    }
+
+    batch {
+        accountName = '<terraform output -raw batch_account_name>'
+        endpoint = '<terraform output -raw batch_account_endpoint>'
+        location = 'centralus'
+        allowPoolCreation = true
+        autoPoolMode = true
+        deletePoolsOnCompletion = true
+    }
+
+    storage {
+        accountName = '<terraform output -raw storage_account_name>'
+    }
+}

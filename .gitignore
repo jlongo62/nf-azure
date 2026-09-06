@@ -1,0 +1,23 @@
+# Terraform working data and state
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+
+# Local variable and override files may contain secrets
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Saved plans
+*.tfplan
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
