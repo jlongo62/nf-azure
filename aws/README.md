@@ -2,7 +2,7 @@
 
 Terraform baseline for the AWS resources needed by a Nextflow AWS Batch integration. It creates a private, encrypted S3 work bucket, IAM roles, and separate head and compute AWS Batch pools.
 
-Both pools use `t3.micro` Spot instances, scale from zero, and have a maximum of three instances (`max_vcpus = 6`). When no VPC, subnet, or security group IDs are supplied, the module creates a dedicated VPC with two public subnets, an internet gateway, routing, and a Batch security group. Supply an existing `nextflow_role_arn` to attach the generated policy to the external service that starts workflows, or attach `nextflow_policy_arn` to that role through your existing IAM workflow.
+Both pools use `c5.large` Spot instances, scale from zero, and have a maximum of three instances (`max_vcpus = 6`). `c5.large` is an x86_64 instance type accepted by AWS Batch in `us-east-2`. When no VPC, subnet, or security group IDs are supplied, the module creates a dedicated VPC with two public subnets, an internet gateway, routing, and a Batch security group. Supply an existing `nextflow_role_arn` to attach the generated policy to the external service that starts workflows, or attach `nextflow_policy_arn` to that role through your existing IAM workflow.
 
 ## Prerequisites
 
