@@ -1,0 +1,12 @@
+- create a module to deploy aws resources required to run nextflow
+- do not create a pool at this time
+- module should go in modules folder
+- module name nf-aws-batch
+- content of aws folder will be where the deploy happens
+- follow pattern already established by azure
+- create readme with instruction on use
+- create head and compute pools
+- pools should auto scale to 0
+- pools should have max nodes of 3
+- pools should use t3.micro
+- pools should be spot instances
