@@ -14,7 +14,7 @@ resource "azurerm_resource_group" "this" {
 }
 
 module "nextflow_batch" {
-  source = "../modules/nextflow-azure-batch"
+  source = "../modules/nf-azure-batch"
 
   name_prefix            = "${var.project_name}-${var.environment}"
   resource_group_name    = azurerm_resource_group.this.name
