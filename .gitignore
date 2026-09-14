@@ -22,3 +22,4 @@ override.tf.json
 .idea/
 .DS_Store
 .nextflow.log
+.nextflow/
