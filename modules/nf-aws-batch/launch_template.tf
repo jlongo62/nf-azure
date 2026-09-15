@@ -11,14 +11,10 @@ Content-Type: text/x-shellscript; charset="us-ascii"
 #!/bin/bash
 set -euxo pipefail
 
-# Do not let this instance register with ECS until Nextflow's
-# host-side AWS CLI is ready.
-systemctl stop ecs || true
+# curl is already provided by curl-minimal on ECS_AL2023.
+dnf install -y unzip
 
-dnf install -y unzip curl
-
-rm -rf /opt/nextflow
-mkdir -p /opt/nextflow
+mkdir -p /opt/nextflow/bin
 
 curl -fsSL \
   https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip \
@@ -31,14 +27,16 @@ unzip -q /tmp/awscliv2.zip -d /tmp
   --install-dir /opt/nextflow/aws-cli \
   --bin-dir /opt/nextflow/bin
 
+# Verify installation before completing cloud-init.
 /opt/nextflow/bin/aws --version
 
 rm -rf /tmp/aws /tmp/awscliv2.zip
 
-# Only advertise this instance to ECS/Batch after installation succeeds.
-systemctl start ecs
-
 --==NEXTFLOW==--
 EOF
   )
+
+  tags = merge(var.tags, {
+    Name = "${var.name_prefix}-nextflow-batch"
+  })
 }
