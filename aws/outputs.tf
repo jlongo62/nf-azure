@@ -29,6 +29,6 @@ output "compute_queue_name" {
 }
 
 output "aws_batch_jobRole_arn" {
-  description = "ARN of the AWS Batch job role."
+  description = "ARN of the AWS Batch job role. Use in batch provider jobRole property"
   value       = module.nextflow_batch.aws_batch_role_nextflow_job.arn
 }
