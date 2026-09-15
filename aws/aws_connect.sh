@@ -1,9 +1,9 @@
-CREDS_FILE="$HOME/secrets/terraform-credentials.json"
+CREDS_FILE="$HOME/secrets/aws-credentials.json"
 PROFILE="terraform"
 REGION="us-east-2"
 
-ACCESS_KEY_ID="$(jq -r '.access_key' "$CREDS_FILE")"
-SECRET_ACCESS_KEY="$(jq -r '.secret_access_key' "$CREDS_FILE")"
+ACCESS_KEY_ID="$(jq -r '.ACCESS_KEY_ID' "$CREDS_FILE")"
+SECRET_ACCESS_KEY="$(jq -r '.SECRET_ACCESS_KEY' "$CREDS_FILE")"
 
 test -n "$ACCESS_KEY_ID" &&
 test "$ACCESS_KEY_ID" != "null" &&
