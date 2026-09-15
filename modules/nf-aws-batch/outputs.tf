@@ -47,3 +47,8 @@ output "compute_compute_environment_name" {
   description = "AWS Batch compute compute environment name."
   value       = aws_batch_compute_environment.compute.compute_environment_name
 }
+
+output "aws_batch_role_nextflow_job" {
+  description = "ARN of the AWS Batch job role."
+  value       = aws_iam_role.nextflow_job
+}

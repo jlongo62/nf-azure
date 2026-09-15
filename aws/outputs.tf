@@ -27,3 +27,8 @@ output "compute_queue_name" {
   description = "AWS Batch job queue for compute jobs."
   value       = module.nextflow_batch.compute_queue_name
 }
+
+output "aws_batch_jobRole_arn" {
+  description = "ARN of the AWS Batch job role."
+  value       = module.nextflow_batch.aws_batch_role_nextflow_job.arn
+}
