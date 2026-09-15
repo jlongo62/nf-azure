@@ -1,7 +1,8 @@
 locals {
   normalized_prefix    = replace(var.name_prefix, "-", "")
-  batch_account_name   = "${local.normalized_prefix}batch"
-  storage_account_name = "${local.normalized_prefix}st"
+  name_hash            = substr(sha256("${data.azurerm_client_config.current.subscription_id}:${var.resource_group_name}:${var.name_prefix}"), 0, 8)
+  batch_account_name   = "${substr(local.normalized_prefix, 0, 10)}${local.name_hash}batch"
+  storage_account_name = "${substr(local.normalized_prefix, 0, 13)}${local.name_hash}st"
 }
 
 resource "azurerm_batch_account" "this" {
