@@ -1,11 +1,31 @@
-resource "aws_iam_user" "nfcc_launch_run" {
-  name = "nfcc-launch-run"
+resource "aws_iam_user" "nf_launch_run" {
+  name = "nf-launch-run"
   path = "/"
 
   tags = local.common_tags
 }
 
-data "aws_iam_policy_document" "nfcc_launch_run" {
+data "aws_iam_policy_document" "nf_launch_run_bucket_discovery" {
+  statement {
+    sid       = "ListVisibleBuckets"
+    effect    = "Allow"
+    actions   = [
+      "s3:ListAllMyBuckets",
+    ]
+    resources = ["*"]
+  }
+  statement {
+    sid       = "ListRegions"
+    effect    = "Allow"
+    actions   = [
+      "account:ListRegions",
+      "ec2:DescribeRegions"
+    ]
+    resources = ["*"]
+  }
+}
+
+data "aws_iam_policy_document" "nf_launch_run" {
   statement {
     sid    = "ListWorkBucket"
     effect = "Allow"
@@ -61,18 +81,24 @@ data "aws_iam_policy_document" "nfcc_launch_run" {
   }
 }
 
-resource "aws_iam_user_policy" "nfcc_launch_run" {
-  name   = "nfcc-launch-run"
-  user   = aws_iam_user.nfcc_launch_run.name
-  policy = data.aws_iam_policy_document.nfcc_launch_run.json
+resource "aws_iam_user_policy" "nf_launch_run" {
+  name   = "nf-launch-run"
+  user   = aws_iam_user.nf_launch_run.name
+  policy = data.aws_iam_policy_document.nf_launch_run.json
 }
 
-output "nfcc_launch_run_user_name" {
+resource "aws_iam_user_policy" "nf_launch_run_bucket_discovery" {
+  name   = "nf-launch-run-bucket-discovery"
+  user   = aws_iam_user.nf_launch_run.name
+  policy = data.aws_iam_policy_document.nf_launch_run_bucket_discovery.json
+}
+
+output "nf_launch_run_user_name" {
   description = "IAM user intended for nf-command-center workflow launches."
-  value       = aws_iam_user.nfcc_launch_run.name
+  value       = aws_iam_user.nf_launch_run.name
 }
 
-output "nfcc_launch_run_user_arn" {
+output "nf_launch_run_user_arn" {
   description = "ARN of the nf-command-center workflow launch IAM user."
-  value       = aws_iam_user.nfcc_launch_run.arn
+  value       = aws_iam_user.nf_launch_run.arn
 }
