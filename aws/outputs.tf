@@ -27,3 +27,13 @@ output "aws_batch_jobRole_arn" {
   description = "ARN of the AWS Batch job role. Use in batch provider jobRole property"
   value       = module.nextflow_batch.aws_batch_role_nextflow_job.arn
 }
+
+output "nf_launch_run_user_name" {
+  description = "IAM user intended for nf-command-center workflow launches."
+  value       = module.nextflow_batch.nf_launch_run_user_name
+}
+
+output "nf_launch_run_user_arn" {
+  description = "ARN of the nf-command-center workflow launch IAM user."
+  value       = module.nextflow_batch.nf_launch_run_user_arn
+}

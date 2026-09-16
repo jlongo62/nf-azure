@@ -52,3 +52,13 @@ output "aws_batch_role_nextflow_job" {
   description = "ARN of the AWS Batch job role."
   value       = aws_iam_role.nextflow_job
 }
+
+output "nf_launch_run_user_name" {
+  description = "IAM user intended for nf-command-center workflow launches."
+  value       = aws_iam_user.nf_launch_run.name
+}
+
+output "nf_launch_run_user_arn" {
+  description = "ARN of the nf-command-center workflow launch IAM user."
+  value       = aws_iam_user.nf_launch_run.arn
+}
