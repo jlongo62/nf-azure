@@ -31,13 +31,6 @@ variable "work_prefix" {
   }
 }
 
-variable "nextflow_role_arn" {
-  description = "Optional existing IAM role ARN used by the external Nextflow service to receive the S3 and AWS Batch policy."
-  type        = string
-  default     = null
-  nullable    = true
-}
-
 variable "force_destroy_bucket" {
   description = "Allow Terraform to delete a non-empty work bucket."
   type        = bool

@@ -2,7 +2,7 @@
 
 Terraform baseline for the AWS resources needed by a Nextflow AWS Batch integration. It creates a private, encrypted S3 work bucket, IAM roles, and separate head and compute AWS Batch pools.
 
-Both pools use `c5.large` Spot instances, scale from zero, and have a maximum of three instances (`max_vcpus = 6`). `c5.large` is an x86_64 instance type accepted by AWS Batch in `us-east-2`. When no VPC, subnet, or security group IDs are supplied, the module creates a dedicated VPC with two public subnets, an internet gateway, routing, and a Batch security group. Supply an existing `nextflow_role_arn` to attach the generated policy to the external service that starts workflows, or attach `nextflow_policy_arn` to that role through your existing IAM workflow.
+Both pools use `c5.large` Spot instances, scale from zero, and have a maximum of three instances (`max_vcpus = 6`). `c5.large` is an x86_64 instance type accepted by AWS Batch in `us-east-2`. When no VPC, subnet, or security group IDs are supplied, the module creates a dedicated VPC with two public subnets, an internet gateway, routing, and a Batch security group. The `nfcc-launch-run` IAM user receives the permissions required to start workflows through an inline policy.
 
 ## Prerequisites
 
@@ -33,10 +33,9 @@ Use the outputs after deployment:
 ```sh
 terraform output -raw work_uri
 terraform output -raw work_bucket_name
-terraform output -raw nextflow_policy_arn
 ```
 
-Set `workDir` to the returned `work_uri` and configure `process.executor` as `awsbatch` with `compute_queue_name` for compute jobs. Use `head_queue_name` for head jobs when your Nextflow configuration separates them. The external service that starts the workflow must assume or use the IAM role with `nextflow_policy_arn` attached. That policy grants the required S3 work-directory access and AWS Batch submit/describe permissions.
+Set `workDir` to the returned `work_uri` and configure `process.executor` as `awsbatch` with `compute_queue_name` for compute jobs. Use `head_queue_name` for head jobs when your Nextflow configuration separates them. The `nfcc-launch-run` user grants the external service the required S3 work-directory and AWS Batch submit/describe permissions.
 
 ## Files
 
@@ -48,7 +47,7 @@ Set `workDir` to the returned `work_uri` and configure `process.executor` as `aw
 - `terraform.tfvars.example`: safe configuration template
 - `../modules/nf-aws-batch`: reusable S3 and IAM module
 
-## Secrets for use with nfcc instance
+## AWS Secrets for use with nfcc instance
 
 ```
 cd /home/q/nf-azure/azure

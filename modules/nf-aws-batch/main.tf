@@ -1,6 +1,5 @@
 locals {
   generated_bucket_name    = "${replace(var.name_prefix, "-", "")}-nextflow-work"
-  nextflow_role_name       = var.nextflow_role_arn == null ? null : element(split("/", var.nextflow_role_arn), length(split("/", var.nextflow_role_arn)) - 1)
   selected_vpc_id          = var.vpc_id == null ? aws_vpc.batch[0].id : var.vpc_id
   selected_subnet_ids      = length(var.subnet_ids) > 0 ? var.subnet_ids : (var.vpc_id == null ? aws_subnet.batch[*].id : data.aws_subnets.existing[0].ids)
   selected_security_groups = length(var.security_group_ids) > 0 ? var.security_group_ids : (var.vpc_id == null ? [aws_security_group.batch[0].id] : [data.aws_security_group.existing[0].id])
@@ -168,74 +167,5 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "work" {
       sse_algorithm = "AES256"
     }
   }
-}
-
-data "aws_iam_policy_document" "nextflow" {
-  statement {
-    sid    = "ListWorkBucket"
-    effect = "Allow"
-    actions = [
-      "s3:GetBucketLocation",
-      "s3:ListBucket",
-      "s3:ListBucketMultipartUploads",
-    ]
-    resources = [aws_s3_bucket.work.arn]
-
-    condition {
-      test     = "StringLike"
-      variable = "s3:prefix"
-      values   = ["${var.work_prefix}", "${var.work_prefix}/*"]
-    }
-  }
-
-  statement {
-    sid    = "ReadWriteWorkObjects"
-    effect = "Allow"
-    actions = [
-      "s3:AbortMultipartUpload",
-      "s3:DeleteObject",
-      "s3:GetObject",
-      "s3:ListMultipartUploadParts",
-      "s3:PutObject",
-    ]
-    resources = ["${aws_s3_bucket.work.arn}/${var.work_prefix}/*"]
-  }
-
-  statement {
-    sid    = "SubmitBatchJobs"
-    effect = "Allow"
-    actions = [
-      "batch:CancelJob",
-      "batch:DescribeJobDefinitions",
-      "batch:DescribeJobs",
-      "batch:DescribeComputeEnvironments",
-      "batch:DescribeJobQueues",
-      "batch:ListJobs",
-      "batch:RegisterJobDefinition",
-      "batch:SubmitJob",
-      "batch:TerminateJob",
-    ]
-    resources = ["*"]
-  }
-
-  statement {
-    sid       = "PassBatchInstanceRole"
-    effect    = "Allow"
-    actions   = ["iam:PassRole"]
-    resources = [aws_iam_role.batch_instance.arn]
-  }
-}
-
-resource "aws_iam_policy" "nextflow" {
-  name        = "${var.name_prefix}-nextflow"
-  description = "S3 work data and AWS Batch permissions for Nextflow."
-  policy      = data.aws_iam_policy_document.nextflow.json
-  tags        = var.tags
-}
-
-resource "aws_iam_role_policy_attachment" "nextflow" {
-  count      = var.nextflow_role_arn == null ? 0 : 1
-  role       = local.nextflow_role_name
-  policy_arn = aws_iam_policy.nextflow.arn
 }
 

@@ -12,7 +12,6 @@ module "nextflow_batch" {
   name_prefix          = "${var.project_name}-${var.environment}"
   bucket_name          = var.bucket_name
   work_prefix          = var.work_prefix
-  nextflow_role_arn    = var.nextflow_role_arn
   force_destroy_bucket = var.force_destroy_bucket
   vpc_id               = var.vpc_id
   vpc_cidr             = var.vpc_cidr

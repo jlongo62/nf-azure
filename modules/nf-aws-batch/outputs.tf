@@ -23,9 +23,9 @@ output "work_uri" {
   value       = "s3://${aws_s3_bucket.work.bucket}/${var.work_prefix}"
 }
 
-output "nextflow_policy_arn" {
-  description = "ARN of the IAM policy containing Nextflow S3 and AWS Batch permissions."
-  value       = aws_iam_policy.nextflow.arn
+output "batch_instance_role_arn" {
+  description = "ARN of the IAM role used by AWS Batch compute instances."
+  value       = aws_iam_role.batch_instance.arn
 }
 
 output "head_queue_name" {

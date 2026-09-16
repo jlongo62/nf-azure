@@ -22,22 +22,27 @@ resource "aws_iam_role_policy" "nextflow_job_s3" {
       {
         Effect = "Allow"
         Action = [
-          "s3:ListBucket"
+          "s3:GetBucketLocation",
+          "s3:ListBucket",
+          "s3:ListBucketMultipartUploads"
         ]
-        Resource = [
-          "arn:aws:s3:::nfawsdev-nextflow-work-20260914223108323400000001"
-        ]
+        Resource = [aws_s3_bucket.work.arn]
+        Condition = {
+          StringLike = {
+            "s3:prefix" = [var.work_prefix, "${var.work_prefix}/*"]
+          }
+        }
       },
       {
         Effect = "Allow"
         Action = [
+          "s3:AbortMultipartUpload",
           "s3:GetObject",
+          "s3:ListMultipartUploadParts",
           "s3:PutObject",
           "s3:DeleteObject"
         ]
-        Resource = [
-          "arn:aws:s3:::nfawsdev-nextflow-work-20260914223108323400000001/*"
-        ]
+        Resource = ["${aws_s3_bucket.work.arn}/${var.work_prefix}/*"]
       }
     ]
   })

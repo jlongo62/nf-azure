@@ -3,7 +3,6 @@ environment  = "dev"
 region       = "us-east-1"
 # bucket_name = "replace-with-a-globally-unique-name"
 work_prefix = "nextflow"
-# nextflow_role_arn = "arn:aws:iam::123456789012:role/nextflow-runtime"
 # vpc_id = "vpc-0123456789abcdef0"
 # vpc_cidr = "10.42.0.0/16"
 # subnet_ids = ["subnet-0123456789abcdef0", "subnet-0fedcba9876543210"]

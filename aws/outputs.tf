@@ -13,11 +13,6 @@ output "work_uri" {
   value       = module.nextflow_batch.work_uri
 }
 
-output "nextflow_policy_arn" {
-  description = "ARN of the IAM policy containing Nextflow permissions."
-  value       = module.nextflow_batch.nextflow_policy_arn
-}
-
 output "head_queue_name" {
   description = "AWS Batch job queue for head jobs."
   value       = module.nextflow_batch.head_queue_name

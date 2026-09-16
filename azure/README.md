@@ -88,3 +88,29 @@ Review every plan before applying it. To remove the resources later, run `terraf
 - `modules/nextflow-azure-batch`: reusable Batch, Storage, Entra service principal, and private container module
 - `nextflow.azure.config.example`: Nextflow Entra authentication and auto-pool configuration template
 - `terraform.tfvars.example`: safe configuration template
+
+## Azure Secrets for use with nfcc instance
+
+```
+cd /home/q/nf-azure/azure
+
+terraform output -json |
+jq '{
+  azure_tenant_id: .entra_tenant_id.value,
+  azure_service_principal_id: .entra_client_id.value,
+  azure_service_principal_secret: .entra_client_secret.value,
+  azure_batch_account_name: .batch_account_name.value,
+  azure_batch_endpoint: ("https://" + .batch_account_endpoint.value),
+  azure_location: "eastus",
+  azure_storage_account_name: .storage_account_name.value,
+  azure_storage_container: .storage_container_name.value,
+  azure_allow_pool_creation: true,
+  azure_auto_pool_mode: true,
+  azure_delete_pools_on_completion: true,
+  azure_machine_type: "Standard_D2s_v3",
+  driver_registry: {
+    registry_url: "nfcr.azurecr.io"
+  },
+  drive_image: "nfcr.azurecr.io/nextflow/nextflow-azure:26.04.6"
+}'
+```
